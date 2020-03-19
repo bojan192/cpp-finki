@@ -1,0 +1,39 @@
+#include <iostream>
+#include <stdio.h>
+ 
+ 
+using namespace std;
+ 
+typedef struct ks 
+{
+    char ime[100];
+    float cena;
+    float kolicina;
+}kosnicka;
+ 
+int main()
+{
+    int n;
+ 
+    cin>>n;
+ 
+    kosnicka k[n+1]; 
+ 
+    for( int i=0; i<n ; i++)
+    {
+        cin>>k[i].ime>>k[i].cena>>k[i].kolicina; 
+    }
+ 
+    float total=0.0;
+ 
+    for( int i=0; i<n ; i++) 
+    {
+        cout<<i+1<<". "<<k[i].ime<<"\t";
+        cout<<k[i].cena<<".00 x "<<k[i].kolicina<<".0"<<" = ";
+        cout<<k[i].cena*k[i].kolicina<<".00"<<endl;
+        total+=k[i].cena*k[i].kolicina;
+    }
+    cout<<"Total: "<<total<<".00";
+   
+    return 0;
+}

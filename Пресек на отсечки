@@ -1,0 +1,46 @@
+#include <iostream>
+    using namespace std;
+
+typedef struct otescka{
+	int x,y;
+    int x1,y1;
+}otsecka;
+
+int secat(otsecka o1,otsecka o2)
+{
+    int sec=1;
+    int bx,by,a1x,a1y,a2x,a2y;
+    bx=o1.x1-o1.x;
+    by=o1.y1-o1.y;
+    a1x=o2.x-o1.x;
+    a1y=o2.y-o1.y;
+    a2x=o2.x1-o1.x;
+    a2y=o2.y1-o1.y;    
+    if (!((bx*a1y-by*a1x)*(bx*a2y-by*a2x)<=0)) 
+    {
+    	sec--;
+        return sec;
+    }
+    bx=o2.x1-o2.x;
+ 	by=o2.y1-o2.y;
+	a1x=o1.x-o2.x;
+    a1y=o1.y-o2.y;
+    a2x=o1.x1-o2.x;
+    a2y=o1.y1-o2.y;
+    if (!((bx*a1y-by*a1x)*(bx*a2y-by*a2x)<=0)) sec--;
+    
+	return sec;
+}
+
+int main(){
+	
+    int x,y,x1,y1;
+    //bool se_secat=true;
+    cin>>x>>y>>x1>>y1;
+    otsecka o1 = {x,y,x1,y1};
+    cin>>x>>y>>x1>>y1;
+    otsecka o2 = {x,y,x1,y1};
+	
+    cout<<secat(o1, o2);
+	return 0;
+}

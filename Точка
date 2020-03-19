@@ -1,0 +1,65 @@
+#include<stdio.h>
+#include <math.h>
+typedef struct tocka {
+    float x1;
+    float y1;
+    float z1;
+} tocka2D,tocka3D;
+//typedef struct tocka2D tocka2D;
+
+/*struct tocka3D{
+    float x;
+    float y;
+    float z;
+};
+typedef struct tocka3D tocka3D;*/
+
+float rastojanie(struct tocka t1,struct tocka t2) {
+    //printf("x2=%.2f x1=%.2f y2=%.2f y1=%.2f\n",t2.x1,t1.x1,t2.y1,t1.y1);
+    float sum1=t2.x1-t1.x1;
+    float sum2=t2.y1-t1.y1;
+    float sum=sqrt((sum1*sum1)+(sum2*sum2));
+    return sum;
+}
+
+float rastojanie3D(struct tocka t3,struct tocka t4) {
+    //printf("x1=%.2f x2=%.2f y1=%.2f y2=%.2f z1=%.2f z2=%.2f\n",t3.x1,t4.x1,t3.y1,t4.y1,t3.z1,t4.z1);
+    float sum1=t4.x1-t3.x1;
+    float sum2=t4.y1-t3.y1;
+    float sum3=t4.z1-t3.z1;
+    float sum=sqrt((sum1*sum1)+(sum2*sum2)+(sum3*sum3));
+    return sum;
+}
+int ista_prava(struct tocka t1,struct tocka t2,struct tocka t5) {
+    int sum=0;
+    //printf("x1=%.2f x2=%.2f y1=%.2f y2=%.2f z1=%.2f z2=%.2f\n",t1.x1,t2.x1,t1.y1,t2.y1,t5.z1,t5.z2);
+    // printf("z1=%.2f z2=%.2f\n",t5.x1,t5.y1);
+ 	if((t1.y1-t2.y1)/(t5.y1-t2.y1)==(t1.x1-t2.x1)/(t5.x1-t2.x1))
+        sum++;
+	//if(((t5.x1>t1.x1)&&(t5.y1>t1.x1))&&((t5.x1>t2.x1)&&(t5.y1==t2.x1)))
+     //sum++;   
+    // sum+=(t1.x1==t2.x1);
+    // sum+=(t1.y1==t2.y1);
+    // sum+=(t5.y1==t5.x1);
+    // sum+=(t1.y1==t2.x1);
+    // sum+=(t2.y1==t1.z1);
+    return sum;
+}
+int main() {
+    float x1, y1, x2, y2;
+    scanf("%f %f", &x1, &y1);
+    scanf("%f %f", &x2, &y2);
+    tocka2D t1 = { x1, y1 };
+    tocka2D t2 = { x2, y2 };
+//   float t1=t2.x-t1.x;
+//   float t2=t2.y-t1.y;
+    printf("%.2f\n", rastojanie(t1, t2));
+    float z1, z2;
+    scanf("%f %f", &z1, &z2);
+    tocka3D t3 = {x1, y1, z1};
+    tocka3D t4 = {x2, y2, z2};
+    printf("%.2f\n", rastojanie3D(t3, t4));
+    tocka2D t5 = {z1, z2};
+    printf("%d\n", ista_prava(t1, t2, t5));
+    return 0;
+}

@@ -1,0 +1,76 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+// vashiot kod ovde
+class Film{
+	char ime[100];
+	char reziser[50];
+    char zanr[50];
+    int godina;
+  public:
+    Film(){}
+    Film (char *i, char *r, char *z, int g){
+    strncpy(ime,i,100);
+    strncpy(reziser,r,50);
+    strncpy(zanr,z,50);
+    godina=g;
+  }
+    void pecati(){
+    cout<<"Ime: "<<ime<<endl;
+    cout<<"Reziser: "<<reziser<<endl;
+    cout<<"Zanr: "<<zanr<<endl;
+    cout<<"Godina: "<<godina<<endl;
+  }
+  void setIme(char *_ime){
+    strncpy(ime,_ime,100);
+  }
+  void setReziser(char *_reziser){
+    strncpy(reziser, _reziser, 50);
+  }
+  void setZhanr(char *_zanr){
+    strncpy (zanr, _zanr, 50);
+  }
+  void setGodina(int _godina){
+    godina=_godina;
+  }
+  int getGodina(){
+    return godina;
+  }
+    //void pecati_po_godina(Film *f, int n, int godina)
+};
+	void pecati_po_godina(Film *f, int n, int godina)
+    {
+    	for(int i=0; i<n;i++){
+    	int k= f[i].getGodina();
+    	if(k==godina){
+      		f[i].pecati();
+    	}
+    }
+    }
+int main() {
+ 	int n;
+ 	cin >> n;
+ 	//da se inicijalizira niza od objekti od klasata Film
+ 	Film arr[100];
+    for(int i = 0; i < n; ++i) {
+ 		char ime[100];
+ 		char reziser[50];
+ 		char zanr[50];
+ 		int godina;
+ 		cin >> ime;
+ 		cin >> reziser;
+ 		cin >> zanr;
+ 		cin >> godina;
+ 		//da se kreira soodveten objekt
+        arr[i].setIme(ime);
+        arr[i].setReziser(reziser);
+    	arr[i].setZhanr(zanr);
+    	arr[i].setGodina(godina);
+ 	}
+ 	int godina;
+ 	cin >> godina;
+ 	//da se povika funkcijata pecati_po_godina
+    pecati_po_godina(arr,n,godina);
+ 	return 0;
+ }

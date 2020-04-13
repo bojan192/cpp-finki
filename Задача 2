@@ -1,0 +1,214 @@
+#include<iostream>
+#include<string.h>
+using namespace std;
+enum zanr{akcija, komedija, drama};
+class Film
+{
+    private:
+    char* ime;
+    int memorija;
+    zanr kojzanr;
+    public:
+    Film(const char* ime="", int memorija=0, zanr kojzanr=zanr(0))
+    {
+        this->memorija=memorija;
+        this->kojzanr=kojzanr;
+        this->ime=new char[strlen(ime)];
+        strcpy(this->ime,ime);
+    }
+    Film(const Film &f)
+    {
+        this->memorija=f.memorija;
+        this->kojzanr=f.kojzanr;
+        this->ime=new char[strlen(f.ime)];
+        strcpy(this->ime,f.ime);
+    }
+    ~Film()
+    {
+        delete [] ime;
+    }
+    Film& operator=(const Film &f)
+    {
+        if(this==&f)
+        {
+            return *this;
+        }
+        this->memorija=f.memorija;
+        this->kojzanr=f.kojzanr;
+        delete [] this->ime;
+        this->ime=new char[strlen(f.ime)];
+        strcpy(this->ime,f.ime);
+        return *this;
+    }
+    void pecati()
+    {
+        cout<<memorija<<"MB-"<<"\""<<ime<<"\""<<endl;
+    }
+    int getMemorija()
+    {
+        return memorija;
+    }
+    int getZanr()
+    {
+        return kojzanr;
+    }
+   
+};
+class DVD
+{
+    private:
+    Film f[5];
+    int brojFilmovi;
+    int memorija;
+    public:
+    DVD(int memorija=0,Film* f=0,int brojFilmovi=0)
+    {
+        this->brojFilmovi=brojFilmovi;
+        this->memorija=memorija;
+        for(int i=0;i<brojFilmovi;i++)
+        {
+            this->f[i]=f[i];
+        }
+    }
+    DVD(const DVD &d)
+    {
+        this->brojFilmovi=d.brojFilmovi;
+        this->memorija=d.memorija;
+        for(int i=0;i<brojFilmovi;i++)
+        {
+            this->f[i]=d.f[i];
+        }
+    }
+    DVD& dodadiFilm(Film f)
+    {
+        int m=f.getMemorija();
+        for(int i=0;i<this->brojFilmovi;i++)
+        {
+            m+=this->f[i].getMemorija();
+        }
+        if(this->brojFilmovi<5&&m<=this->memorija)
+        {
+            this->f[brojFilmovi]=f;
+            brojFilmovi++;
+        }
+        return *this;
+    }
+    void pecatiFilmoviDrugZanr(zanr z)
+    {
+        for(int i=0;i<this->brojFilmovi;i++)
+        {
+            if(this->f[i].getZanr()!=z)
+            {
+                this->f[i].pecati();
+            }
+        }
+    }
+    float procentNaMemorijaOdZanr(zanr z)
+    {
+        int m=0,m1=0;
+        for(int i=0;i<brojFilmovi;i++)
+        {
+            if(this->f[i].getZanr()==z)
+            {
+                m+=this->f[i].getMemorija();
+            }
+            m1+=this->f[i].getMemorija();
+        }
+        return float (m)/m1*100;
+    }
+    int getBroj()
+    {
+        return this->brojFilmovi;
+    }
+    Film getFilm(int i)
+    {
+        return this->f[i];
+    }
+};
+int main() {
+    // se testira zadacata modularno
+    int testCase;
+    cin >> testCase;
+
+    int n, memorija, kojzanr;
+    char ime[50];
+
+    if (testCase == 1) {
+        cout << "===== Testiranje na klasata Film ======" << endl;
+        cin >> ime;
+        cin >> memorija;
+        cin >> kojzanr; //se vnesuva 0 za AKCIJA,1 za KOMEDIJA i 2 za DRAMA
+        Film f(ime, memorija, (zanr) kojzanr);
+        f.pecati();
+    } else if (testCase == 2) {
+        cout << "===== Testiranje na klasata DVD ======" << endl;
+        DVD omileno(50);
+        cin >> n;
+        for (int i = 0; i < n; i++) {
+            cin >> ime;
+            cin >> memorija;
+            cin >> kojzanr; //se vnesuva 0 za AKCIJA,1 za KOMEDIJA i 2 za DRAMA
+            Film f(ime, memorija, (zanr) kojzanr);
+            omileno.dodadiFilm(f);
+        }
+        for (int i = 0; i < n; i++)
+            (omileno.getFilm(i)).pecati();
+    } else if (testCase == 3) {
+        cout << "===== Testiranje na metodot dodadiFilm() od klasata DVD ======" << endl;
+        DVD omileno(50);
+        cin >> n;
+        for (int i = 0; i < n; i++) {
+            cin >> ime;
+            cin >> memorija;
+            cin >> kojzanr; //se vnesuva 0 za AKCIJA,1 za KOMEDIJA i 2 za DRAMA
+            Film f(ime, memorija, (zanr) kojzanr);
+            omileno.dodadiFilm(f);
+        }
+        for (int i = 0; i < omileno.getBroj(); i++)
+            (omileno.getFilm(i)).pecati();
+    } else if (testCase == 4) {
+        cout << "===== Testiranje na metodot pecatiFilmoviDrugZanr() od klasata DVD ======" << endl;
+        DVD omileno(50);
+        cin >> n;
+        for (int i = 0; i < n; i++) {
+            cin >> ime;
+            cin >> memorija;
+            cin >> kojzanr; //se vnesuva 0 za AKCIJA,1 za KOMEDIJA i 2 za DRAMA
+            Film f(ime, memorija, (zanr) kojzanr);
+            omileno.dodadiFilm(f);
+        }
+        cin >> kojzanr;
+        omileno.pecatiFilmoviDrugZanr((zanr) kojzanr);
+
+    } else if (testCase == 5) {
+        cout << "===== Testiranje na metodot pecatiFilmoviDrugZanr() od klasata DVD ======" << endl;
+        DVD omileno(50);
+        cin >> n;
+        for (int i = 0; i < n; i++) {
+            cin >> ime;
+            cin >> memorija;
+            cin >> kojzanr; //se vnesuva 0 za AKCIJA,1 za KOMEDIJA i 2 za DRAMA
+            Film f(ime, memorija, (zanr) kojzanr);
+            omileno.dodadiFilm(f);
+        }
+        cin >> kojzanr;
+        omileno.pecatiFilmoviDrugZanr((zanr) kojzanr);
+
+    } else if (testCase == 6){
+		cout<<"===== Testiranje na metodot procentNaMemorijaOdZanr() od klasata DVD =====" <<endl;
+		DVD omileno(40);
+		cin >> n;
+		for (int i = 0; i < n; i++) {
+            cin >> ime;
+            cin >> memorija;
+            cin >> kojzanr; //se vnesuva 0 za AKCIJA,1 za KOMEDIJA i 2 za DRAMA
+            Film f(ime, memorija, (zanr) kojzanr);
+            omileno.dodadiFilm(f);
+        }
+        cin >> kojzanr;
+        cout<<"Procent na filmovi od dadeniot zanr iznesuva: "<<omileno.procentNaMemorijaOdZanr((zanr) kojzanr)<<"%\n";
+		
+	}
+
+    return 0;
+}

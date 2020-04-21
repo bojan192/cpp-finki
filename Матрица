@@ -1,0 +1,136 @@
+#include <iostream>
+#include<cstring>
+ 
+using namespace std;
+ 
+class Matrica
+{
+private:
+    int dimenzija;
+    float mat[10][10];
+ 
+public:
+    Matrica(int dimenzija=0,float mat[10][10]=NULL)
+    {
+        this->dimenzija=dimenzija;
+        for(int i=0;i<dimenzija;i++)
+        {
+            for(int j=0;j<dimenzija;j++)
+            {
+                this->mat[i][j]=mat[i][j];
+            }
+        }
+    }
+    Matrica(const Matrica &m)
+    {
+        this->dimenzija=m.dimenzija;
+        for(int i=0;i<this->dimenzija;i++)
+        {
+            for(int j=0;j<this->dimenzija;j++)
+            {
+                this->mat[i][j]=m.mat[i][j];
+            }
+        }
+    }
+    Matrica &operator=(const Matrica &m)
+    {
+        if(this!=&m)
+        {
+            this->dimenzija=m.dimenzija;
+            for(int i=0; i<this->dimenzija; i++)
+            {
+                for(int j=0; j<this->dimenzija; j++)
+                {
+                    this->mat[i][j]=m.mat[i][j];
+                }
+            }
+        }
+        return *this;
+    }
+ 
+    Matrica operator+(int const &m)
+    {
+        Matrica c;
+        c.dimenzija=this->dimenzija;
+        for(int i=0;i<this->dimenzija;i++)
+        {
+            for(int j=0;j<this->dimenzija;j++)
+            {
+                c.mat[i][j]=this->mat[i][j] + m;
+            }
+        }
+        return c;
+    }
+ 
+    Matrica operator-(const Matrica &m)
+    {
+        Matrica c;
+        c.dimenzija=this->dimenzija;
+        for(int i=0;i<this->dimenzija;i++)
+        {
+            for(int j=0;j<this->dimenzija;j++)
+            {
+                c.mat[i][j]=this->mat[i][j] - m.mat[i][j];
+            }
+        }
+        return c;
+    }
+ 
+    friend istream& operator>>(istream &x,Matrica &m)
+    {
+        x>>m.dimenzija>>m.dimenzija;
+        for(int i=0;i<m.dimenzija;i++)
+        {
+            for(int j=0;j<m.dimenzija;j++)
+            {
+                x>> m.mat[i][j];
+            }
+        }
+        return x;
+    }
+    friend ostream& operator<<(ostream &x, Matrica &m)
+    {
+        for(int i=0;i<m.dimenzija;i++)
+        {
+            for(int j=0;j<m.dimenzija;j++)
+            {
+                x<< m.mat[i][j] <<" ";
+            }
+            x << endl;
+        }
+        return x;
+    }
+    Matrica operator*(Matrica const &m)
+    {
+        Matrica t;
+        t.dimenzija=this->dimenzija;
+        float element;
+        int j;
+        for(int i=0;i<this->dimenzija;i++)
+        {
+ 
+            for(j=0;j<this->dimenzija;j++)
+            {
+                element=0;
+                for(int k=0;k<this->dimenzija;k++)
+                {
+                    element+=this->mat[i][k]*m.mat[k][j];
+                }
+               t.mat[i][j]=element;
+            }
+ 
+        }
+        return t;
+    }
+ 
+};
+//vashiot kod ovde
+
+int main()
+{
+    Matrica A,B,C;
+    cin>>A>>B>>C;
+    Matrica D=B*C;
+    Matrica R=A-D+2;
+    cout<<R;
+}

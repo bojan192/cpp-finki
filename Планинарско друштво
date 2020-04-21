@@ -1,0 +1,111 @@
+#include <iostream>
+#include <string.h>
+using namespace std;
+class PlDrustvo
+{
+private:
+    char *ime;
+    int turi;
+    int brClenovi;
+ 
+public:
+    PlDrustvo(char *ime="",int turi=0,int brClenovi=0)
+    {
+        this->turi=turi;
+        this->brClenovi=brClenovi;
+        this->ime=new char[strlen(ime)+1];
+        strcpy(this->ime,ime);
+    }
+    PlDrustvo(const PlDrustvo &p)
+    {
+        ime = new char[strlen(p.ime)+1];
+        strcpy(ime,p.ime);
+        turi = p.turi;
+        brClenovi = p.brClenovi;
+    }
+ 
+    PlDrustvo& operator=(PlDrustvo p)
+    {
+        if (this != &p)
+        {
+            delete []ime;
+            ime = new char[strlen(p.ime)+1];
+            strcpy(ime,p.ime);
+            turi = p.turi;
+            brClenovi = p.brClenovi;
+        }
+ 
+        return *this;
+    }
+    PlDrustvo operator+(PlDrustvo &p1)
+    {
+        bool flag;
+        PlDrustvo d;
+        if(p1.brClenovi>brClenovi)
+            flag=1;
+        else flag=0;
+        d.brClenovi=this->brClenovi+p1.brClenovi;
+        if(flag)
+        {
+            d.turi=p1.turi;
+            delete [] d.ime;
+            d.ime=new char[strlen(p1.ime)+1];
+            strcpy(d.ime,p1.ime);
+            return d;
+        }
+        else
+        {
+            d.turi=this->turi;
+            delete [] d.ime;
+            d.ime=new char[strlen(this->ime)+1];
+            strcpy(d.ime,this->ime);
+            return d;
+        }
+    }
+    bool operator>(const PlDrustvo &p)
+    {
+        return this->brClenovi > p.brClenovi;
+    }
+    bool operator<(const PlDrustvo &p)
+    {
+        return this->brClenovi < p.brClenovi;
+    }
+ 
+    friend ostream& operator<<(ostream &x,PlDrustvo &p)
+    {
+        x<<"Ime: "<<p.ime<<" "<<"Turi: "<<p.turi<<" "<<"Clenovi: "<<p.brClenovi<<endl;
+        return x;
+    }
+};
+void najmnoguClenovi(PlDrustvo *pl, int n)
+{
+    PlDrustvo p = pl[0];
+    for (int i=1; i<n; i++)
+        if (pl[i] > p) p=pl[i];
+ 
+    cout<<"Najmnogu clenovi ima planinarskoto drustvo: "<<p;
+}
+int main()
+{        		
+    PlDrustvo drustva[3];
+    PlDrustvo pl;
+    for (int i=0;i<3;i++)
+   	{
+    	char ime[100];
+    	int brTuri;
+    	int brClenovi;
+    	cin>>ime;
+    	cin>>brTuri;
+    	cin>>brClenovi;
+    	PlDrustvo p(ime,brTuri,brClenovi);
+        drustva[i] = p;
+    	
+   	}
+    
+    pl = drustva[0] + drustva[1];
+    cout<<pl;
+    
+    najmnoguClenovi(drustva, 3);
+    
+    return 0;
+}

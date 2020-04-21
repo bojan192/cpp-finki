@@ -1,0 +1,277 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+
+// Не го менувајте main методот.
+class ComplexNumber
+{
+private:
+    double real;
+    double imaginary; 
+public:
+    ComplexNumber(double real=0,double imaginary=0)
+    {
+        this->real=real;
+        this->imaginary=imaginary;
+    }
+    ComplexNumber(const ComplexNumber &c)
+    {
+        this->real=c.real;
+        this->imaginary=c.imaginary;
+    }
+    ComplexNumber &operator=(const ComplexNumber &c)
+    {
+        if(this!=&c)
+        {
+            this->real=c.real;
+        	this->imaginary=c.imaginary;
+        }
+        return *this;
+    }
+    double module()
+    {
+        return sqrt(pow(real,2)+pow(imaginary,2));
+    }
+    friend ostream &operator<<(ostream &o,const ComplexNumber &c)
+    {
+        if(c.real==0)
+        {
+            o<<c.imaginary<<"i"<<endl;
+        }
+        else if(c.imaginary==0)
+        {
+            o<<c.real<<endl;
+        }
+        else 
+             o<<c.real<<"+"<<c.imaginary<<"i"<<endl;
+        return o;
+    }
+    friend ComplexNumber operator+(const ComplexNumber &a,const ComplexNumber &b)
+    {
+        ComplexNumber c(a.real+b.real,a.imaginary+b.imaginary);
+        return c;
+    }
+    friend ComplexNumber operator-(const ComplexNumber &a,const ComplexNumber &b)
+    {
+        ComplexNumber c(a.real-b.real,a.imaginary-b.imaginary);
+        return c;
+    }
+    friend ComplexNumber operator*(const ComplexNumber &a,const ComplexNumber &b)
+    {
+        ComplexNumber c(a.real*b.real,a.imaginary*b.imaginary);
+        return c;
+    }
+    friend ComplexNumber operator/(const ComplexNumber &a,const ComplexNumber &b)
+    {
+        ComplexNumber c(a.real/b.real,a.imaginary/b.imaginary);
+        return c;
+    }
+    friend bool operator==(const ComplexNumber &a,const ComplexNumber &b)
+    {
+        if(a.real==b.real&&a.imaginary==b.imaginary)
+        {
+            return true;
+        }
+        else 
+            return false;
+    }
+    friend bool operator>(const ComplexNumber &a,const ComplexNumber &b)
+    {
+        if(a.real>b.real)
+        {
+            return true;
+        }
+        else if(a.real==b.real)
+        {
+            if(a.imaginary>b.imaginary)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    friend bool operator<(const ComplexNumber &a,const ComplexNumber &b)
+    {
+        if(a.real<b.real)
+        {
+            return true;
+        }
+        else if(a.real==b.real)
+        {
+            if(a.imaginary<b.imaginary)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+class Equation
+{
+private:
+    ComplexNumber *complexbr;
+    char *operatori;
+    int n;
+public:
+    Equation()
+    {
+        n=0;
+        complexbr=NULL;
+        operatori=NULL;
+    }
+    friend istream &operator>>(istream &i,Equation &e)
+    {
+        double real, imaginary;
+        char op;
+        while(1) 
+        {
+                i>>real>>imaginary>>op;
+                ComplexNumber pomosna(real, imaginary);
+                ComplexNumber *temp = new ComplexNumber[e.n+1];
+                char *temp2 = new char[e.n+1];
+                for(int i=0; i<e.n; i++) 
+                {
+                    temp2[i] = e.operatori[i];
+                    temp[i] = e.complexbr[i];
+                }
+                temp[e.n] = pomosna;
+                temp2[e.n] = op;
+                e.n++;
+                delete [] e.operatori;
+                delete [] e.complexbr;
+                e.complexbr = temp;
+                e.operatori = temp2;
+ 
+                if(op == '=') {
+                    break;
+                }
+         }
+            return i;
+     }
+    ~Equation() 
+    {
+         delete [] complexbr;
+         delete [] operatori;
+    }
+    ComplexNumber result()
+    {
+        ComplexNumber r(complexbr[0]);
+        for(int i=1;i<n;i++)
+        {
+            if(operatori[i-1]=='+')
+            {
+                r=r+complexbr[i];
+            }
+            if(operatori[i-1]=='-')
+            {
+                r=r-complexbr[i];
+            }
+            if(operatori[i-1]=='*')
+            {
+                r=r*complexbr[i];
+            }
+            if(operatori[i-1]=='/')
+            {
+                r=r/complexbr[i];
+            }
+        }
+        return r;
+    }
+    double sumModules()
+    {
+        double sum=0;
+        for(int i=0;i<n;i++)
+        {
+            sum+=complexbr[i].module();
+        }
+        return sum;
+    }
+};
+int main() {
+	int testCase;
+	double real, imaginary;
+	ComplexNumber first, second, result;
+
+	cin >> testCase;
+
+	if (testCase <= 8) {
+		cin >> real;
+		cin >> imaginary;
+		first = ComplexNumber(real, imaginary);
+		cin >> real;
+		cin >> imaginary;
+		second = ComplexNumber(real, imaginary);
+	}
+
+	if (testCase == 1) {
+		cout << "===== OPERATOR + =====" << endl;
+		result = first + second;
+		cout << result;
+	}
+	else if (testCase == 2) {
+		cout << "===== OPERATOR - =====" << endl;
+		result = first - second;
+		cout << result;
+	}
+	else if (testCase == 3) {
+		cout << "===== OPERATOR * =====" << endl;
+		result = first * second;
+		cout << result;
+	}
+	else if (testCase == 4) {
+		cout << "===== OPERATOR / =====" << endl;
+		result = first / second;
+		cout << result;
+	}
+	else if (testCase == 5) {
+		cout << "===== OPERATOR == =====" << endl;
+		cout << first;
+		cout << second;
+		if (first == second)
+			cout << "EQUAL" << endl;
+		else
+			cout << "NOT EQUAL" << endl;
+	}
+	else if (testCase == 6) {
+		cout << "===== OPERATOR > =====" << endl;
+		cout << first;
+		cout << second;
+		if (first > second)
+			cout << "FIRST GREATER THAN SECOND" << endl;
+		else
+			cout << "FIRST LESSER THAN SECOND" << endl;
+	}
+	else if (testCase == 7) {
+		cout << "===== OPERATOR < =====" << endl;
+		cout << first;
+		cout << second;
+		if (first < second)
+			cout << "FIRST LESSER THAN SECOND" << endl;
+		else
+			cout << "FIRST GREATER THAN SECOND" << endl;
+	}
+	else if (testCase == 8) {
+		cout << "===== MODULE =====" << endl;
+		double module = first.module();
+		cout << first;
+		cout << "Module: " << module << endl;
+		cout << second;
+		module = second.module();
+		cout << "Module: " << module << endl;
+	}
+	else if (testCase == 9) {
+		cout << "===== OPERATOR >> & SUM OF MODULES =====" << endl;
+		Equation equation;
+		cin >> equation;
+		cout << equation.sumModules();
+	}
+	else if (testCase == 10) {
+		cout << "===== EQUATION RESULT =====" << endl;
+		Equation equation;
+		cin >> equation;
+		result = equation.result();
+		cout << result;
+	}
+	return 0;
+}

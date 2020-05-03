@@ -1,0 +1,97 @@
+#include <iostream>
+using namespace std;
+class Kvadrat{
+private:
+    double a;
+ 
+public:
+    Kvadrat(double x = 0.0){
+        a = x;
+    }
+ 
+    Kvadrat(const Kvadrat &k){
+        a = k.a;
+    }
+ 
+    double Perimetar(){
+        return a * 4;
+    }
+ 
+    double Plostina(){
+        return a * a;
+    }
+ 
+    double geta(){
+        return a;
+    }
+    void pecati(){
+        cout << "Kvadrat so dolzina a=" << a << " ima plostina P=" << Plostina() <<" i perimetar L="<< Perimetar() << endl;
+    }
+};
+class Pravoagolnik : public Kvadrat{
+    double x, y;
+public:
+    Pravoagolnik(double a = 0, double z = 0, double w = 0) : Kvadrat(a){
+        x = a + z;
+        y = a + w;
+    }
+   
+    Pravoagolnik(Kvadrat &k, double z = 0, double w = 0) : Kvadrat(k){
+        x = k.geta() + z;
+        y = k.geta() + w;
+    }
+   
+ 
+    double Perimetar(){
+        return 2*x + 2*y;
+    }
+    double Plostina(){
+        return x * y;
+    }
+    void pecati(){
+        if (x == y)
+                    cout << "Kvadrat so dolzina a=" << x <<" ima plostina P=" << Plostina() << " i perimetar L=" << Perimetar() << endl;
+ 
+ 
+        else
+        cout << "Pravoagolnik so strani: " << x <<" i " << y <<" ima plostina P=" << Plostina() << " i perimetar L=" << Perimetar() << endl;
+    }
+};
+ 
+int main() {
+    int n;
+    double a,x,y;
+    Kvadrat * kvadrati;
+    Pravoagolnik * pravoagolnici;
+   
+    cin>>n;
+   
+    kvadrati = new Kvadrat [n];
+    pravoagolnici = new Pravoagolnik [n];
+   
+    for (int i=0;i<n;i++){
+        cin>>a;
+       
+        kvadrati[i] = Kvadrat(a);
+    }
+   
+    for (int i=0;i<n;i++){
+        cin>>x>>y;
+       
+        pravoagolnici[i]=Pravoagolnik(kvadrati[i],x,y);
+    }
+   
+    int testCase;
+    cin>>testCase;
+   
+    if (testCase==1){
+        cout<<"===Testiranje na klasata Kvadrat==="<<endl;
+        for (int i=0;i<n;i++)
+            kvadrati[i].pecati();
+    }
+    else {
+        cout<<"===Testiranje na klasata Pravoagolnik==="<<endl;
+        for (int i=0;i<n;i++)
+            pravoagolnici[i].pecati();
+    }
+}

@@ -1,0 +1,58 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+ 
+class Ekipa
+{
+protected:
+    char ime[10];
+    int porazi, pobedi;
+public:
+    Ekipa(char *i = "", int pob = 0, int por = 0)
+    {
+        strcpy(ime, i);
+        pobedi = pob;
+        porazi = por;
+    }
+   
+    void pecati()
+    {
+        cout << "Ime: " << ime << " Pobedi: " << pobedi << " Porazi: " << porazi;
+    }
+};
+ 
+class FudbalskaEkipa : public Ekipa
+{
+private:
+    int crveni, zholti, neresheni;
+public:
+    FudbalskaEkipa(char *i, int pob, int por, int crv, int zho, int ner)
+    {
+        strcpy(ime, i);
+        pobedi = pob;
+        porazi = por;
+        crveni = crv;
+        zholti = zho;
+        neresheni = ner;
+    }
+   
+    int poeni()
+    {
+        return pobedi*3 + neresheni;
+    }
+   
+    void pecati()
+    {
+        Ekipa::pecati();
+        cout << " Nereseni: " << neresheni << " Poeni: " << poeni() << endl;
+    }
+};
+ 
+int main(){
+    char ime[15];
+    int pob,por,ck,zk,ner;
+    cin>>ime>>pob>>por>>ck>>zk>>ner;
+    FudbalskaEkipa f1(ime,pob,por,ck,zk,ner);
+    f1.pecati();
+    return 0;
+}

@@ -1,0 +1,158 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+ 
+class NBAPlayer{
+    protected:
+        char *ime;
+        char tim[40];
+        double poeni;
+        double asistencii;
+        double skokovi;
+   
+    public:
+    NBAPlayer(){}
+    NBAPlayer(const char *ime, const char *tim, double poeni, double asistencii, double skokovi){
+        this->ime = new char[strlen(ime)+1];
+        strcpy(this->ime, ime);
+        strcpy(this->tim, tim);
+        this->poeni = poeni;
+        this->asistencii = asistencii;
+        this->skokovi = skokovi;
+    }
+   
+    NBAPlayer(const NBAPlayer &rhs){      
+        this->ime = new char[strlen(rhs.ime)+1];
+        strcpy(this->ime, rhs.ime);
+        strcpy(this->tim, rhs.tim);
+        this->poeni = rhs.poeni;
+        this->asistencii = rhs.asistencii;
+        this->skokovi = rhs.skokovi;
+    }
+   
+    NBAPlayer &operator=(const NBAPlayer &rhs){    
+        this->ime = new char[strlen(rhs.ime)+1];
+        strcpy(this->ime, rhs.ime);
+        strcpy(this->tim, rhs.tim);
+        this->poeni = rhs.poeni;
+        this->asistencii = rhs.asistencii;
+        this->skokovi = rhs.skokovi;
+        return *this;
+    }
+   
+    double rating(){
+        return poeni*0.45+asistencii*0.3+skokovi*0.25;
+    }
+   
+    void print(){
+        cout << ime << " - " << tim << endl;
+        cout << "Points: " << poeni << endl;
+        cout << "Assists: " << asistencii << endl;
+        cout << "Rebounds: " << skokovi << endl;
+        cout << "Rating: " << rating() << endl;
+    }
+};
+ 
+class AllStarPlayer: public NBAPlayer{
+    private:
+        double poeni;
+        double asistencii;
+        double skokovi;
+   
+    public:
+    AllStarPlayer(){}
+   
+    AllStarPlayer(const char *ime, const char *tim, double poeni, double asistencii, double skokovi
+                  , double AllStarPoeni, double AllStarAsistencii, double AllStarSkokovi): NBAPlayer(ime, tim, poeni, asistencii, skokovi){
+        this->poeni = AllStarPoeni;
+        this->asistencii = AllStarAsistencii;
+        this->skokovi = AllStarSkokovi;
+    }
+   
+    AllStarPlayer(NBAPlayer &rhs, double AllStarPoeni, double AllStarAsistencii, double AllStarSkokovi): NBAPlayer(rhs){
+        this->poeni = AllStarPoeni;
+        this->asistencii = AllStarAsistencii;
+        this->skokovi = AllStarSkokovi;
+    }
+   
+    AllStarPlayer(const AllStarPlayer &rhs){
+        this->poeni = rhs.poeni;
+        this->asistencii = rhs.asistencii;
+        this->skokovi = rhs.skokovi;
+    }
+   
+    double allStarRating(){
+        return poeni*0.3+asistencii*0.4+skokovi*0.3;
+    }
+   
+    void print(){
+        NBAPlayer::print();
+        cout << "All Star Rating: " << allStarRating() << endl;
+        cout << "New Rating: " << (NBAPlayer::rating()+allStarRating())/2 << endl;
+    }
+   
+};
+int main() {
+ 
+  char name[50];
+  char team[40];
+  double points;
+  double assists;
+  double rebounds;
+  double allStarPoints;
+  double allStarAssists;
+  double allStarRebounds;
+ 
+  NBAPlayer * players = new NBAPlayer[5];
+  AllStarPlayer * asPlayers = new AllStarPlayer[5];
+  int n;
+  cin >> n;
+ 
+  if (n == 1) {
+ 
+    cout << "NBA PLAYERS:" << endl;
+    cout << "=====================================" << endl;
+    for (int i = 0; i < 5; ++i) {
+      cin >> name >> team >> points >> assists >> rebounds;
+      players[i] = NBAPlayer(name,team,points,assists,rebounds);
+      players[i].print();
+    }
+  }
+  else if (n == 2) {
+ 
+    for (int i=0; i < 5; ++i){
+      cin >> name >> team >> points >> assists >> rebounds;
+      cin >> allStarPoints >> allStarAssists >> allStarRebounds;
+      players[i] = NBAPlayer(name,team,points,assists,rebounds);
+      asPlayers[i] = AllStarPlayer(players[i],allStarPoints,allStarAssists,allStarRebounds);
+    }
+ 
+    cout << "NBA PLAYERS:" << endl;
+    cout << "=====================================" << endl;
+    for (int i=0; i < 5; ++i)
+      players[i].print();
+ 
+    cout << "ALL STAR PLAYERS:" << endl;
+    cout << "=====================================" << endl;
+    for (int i=0; i < 5; ++i)
+      asPlayers[i].print();
+ 
+    }
+    else if (n == 3) {
+ 
+      for (int i=0; i < 5; ++i){
+        cin >> name >> team >> points >> assists >> rebounds;
+        cin >> allStarPoints >> allStarAssists >> allStarRebounds;
+        asPlayers[i] = AllStarPlayer(name, team, points, assists, rebounds,
+                                     allStarPoints,allStarAssists,allStarRebounds);
+      }
+      cout << "ALL STAR PLAYERS:" << endl;
+      cout << "=====================================" << endl;
+      for (int i=0; i < 5; ++i)
+        asPlayers[i].print();
+ 
+    }
+   
+    delete [] players;
+    delete [] asPlayers;
+}

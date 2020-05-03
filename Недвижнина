@@ -1,0 +1,67 @@
+#include <iostream>
+using namespace std;
+ 
+class Nedvizhnina{
+protected:
+    char *adresa; // DIN AL.
+    int kvadratura;
+    int cenaKvadrat;
+   
+public:
+    Nedvizhnina(){adresa=new char[0];} // default constructor
+    int cena()
+    {
+        return kvadratura*cenaKvadrat;
+    }
+    void pecati()
+    {
+        cout<<adresa<<", Kvadratura: "<<kvadratura<<", Cena po Kvadrat: "<<cenaKvadrat<<endl;
+    }
+    float danokNaImot()
+    {
+        return (float)kvadratura*cenaKvadrat*5/100;
+    }
+    friend istream &operator>>(istream &in, Nedvizhnina &c)
+    {
+        return in>>c.adresa>>c.kvadratura>>c.cenaKvadrat;
+    }
+    char *getAdresa()
+    {
+        return adresa;
+    }
+};
+ 
+class Vila: public Nedvizhnina {
+    private:
+    int danokLuksuz;
+    public:
+    Vila(){} // default
+    void pecati()
+    {
+        cout<<adresa<<", Kvadratura: "<<kvadratura<<", Cena po Kvadrat: "<<cenaKvadrat<<", Danok na luksuz: "<<danokLuksuz<<endl;
+    }
+    float danokNaImot()
+    {
+        return Nedvizhnina::cena()*(5+danokLuksuz)/100;
+    }
+    friend istream &operator>>(istream &in, Vila &c)
+    {
+        return in>>c.adresa>>c.kvadratura>>c.cenaKvadrat>>c.danokLuksuz;
+    }
+    char *getAdresa()
+    {
+        return adresa;
+    }
+};
+ 
+int main(){
+    Nedvizhnina n;
+    Vila v;
+    cin>>n;
+    cin>>v;
+    n.pecati();
+    cout<<"Danok za: "<<n.getAdresa()<<", e: "<<n.danokNaImot()<<endl;
+    v.pecati();
+    cout<<"Danok za: "<<v.getAdresa()<<", e: "<<v.danokNaImot()<<endl;
+    return 0;
+}
